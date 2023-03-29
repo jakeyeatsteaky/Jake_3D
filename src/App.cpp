@@ -11,7 +11,7 @@ bool App::IsRunning()
 void App::Setup()
 {
     //SeedRandom();
-    running = Graphics::CreateWindow();
+    running = Graphics::CreateSDLWindow();
 }
 
 void App::Input()

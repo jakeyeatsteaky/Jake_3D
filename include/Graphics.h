@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "SDL.h"
+#include "glad/glad.h"
 
 const int FPS = 60;
 const int MS_PER_FRAME = 1000/FPS;
@@ -15,11 +16,11 @@ struct Graphics
     static int window_width;
     static int window_height;
     static SDL_Window* window;
-    static SDL_Renderer* renderer;
+    static SDL_GLContext openGL_context;
 
     static int Width() {return window_width;}
     static int Height() {return window_height;}
-    static bool CreateWindow();
+    static bool CreateSDLWindow();
     static void DestroyWindow();
     static void ClearScreen(uint32_t color); 
     static void RenderFrame();
