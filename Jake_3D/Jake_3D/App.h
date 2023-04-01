@@ -19,6 +19,7 @@ public:
 private:
 	bool m_running = false;
 	VulkanRenderer* m_renderer;
+	GLFWwindow* m_window;
 
 };
 

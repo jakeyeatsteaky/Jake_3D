@@ -1,2 +1,5 @@
-﻿  VulkanRenderer.cpp
+﻿  App.cpp
+  VulkanRenderer.cpp
+  main.cpp
+  Generating Code...
   Jake_3D.vcxproj -> C:\Users\jakeb\Desktop\portfolio\Jake_3D\Jake_3D\x64\Debug\Jake_3D.exe

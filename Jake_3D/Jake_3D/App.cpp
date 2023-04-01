@@ -6,14 +6,21 @@ App::App() {
 }
 
 bool App::IsRunning() {
-	if (glfwWindowShouldClose(m_renderer->getWindow()))
+	if (glfwWindowShouldClose(m_window))
 		m_running = false;
 	return m_running;
 }
 
 void App::Setup() 
 {
+	glfwInit();
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+    m_window = glfwCreateWindow(800, 600, "Jake 3D", nullptr, nullptr);
+    uint32_t extensionCount = 0;
+    vkEnumerateInstanceExtensionProperties(nullptr, &extensionCount, nullptr);
+	std::cout << "Extensions available: " << extensionCount << std::endl;
 	m_running = true;
+
 	m_renderer = new VulkanRenderer();
 	m_renderer->Init();
 }
@@ -35,6 +42,8 @@ void App::Render()
 
 void App::Destroy() 
 {
-	glfwDestroyWindow(m_renderer->getWindow());
+	m_renderer->CleanUp();
+
+	glfwDestroyWindow(m_window);
 	glfwTerminate();
 }
