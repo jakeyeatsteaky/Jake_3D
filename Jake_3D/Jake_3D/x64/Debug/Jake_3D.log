@@ -1,5 +1,3 @@
-﻿  App.cpp
-  VulkanRenderer.cpp
-  main.cpp
-  Generating Code...
+﻿  VulkanRenderer.cpp
+C:\Users\jakeb\Desktop\portfolio\Jake_3D\Jake_3D\Jake_3D\VulkanRenderer.cpp(63,67): warning C4267: '=': conversion from 'size_t' to 'uint32_t', possible loss of data
   Jake_3D.vcxproj -> C:\Users\jakeb\Desktop\portfolio\Jake_3D\Jake_3D\x64\Debug\Jake_3D.exe

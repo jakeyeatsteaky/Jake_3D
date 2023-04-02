@@ -14,15 +14,26 @@ public:
 	void Init();
 	void CreateInstance();
 	bool CheckValidationLayers();
+	VkResult SetupDebugMessenger();
+	void DestroyDebugMessenger();
 
 	void CleanUp();
 
 	std::vector<VkExtensionProperties> EnumerateExtensions(bool printEnumList);
+	std::vector<const char*> getRequiredExtensions() { return m_requiredExtensions; }
+
+	static VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
+		VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+		VkDebugUtilsMessageTypeFlagsEXT messageType,
+		const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
+		void* pUserData);
 
 private:
 	VkInstance m_instance;
+	VkDebugUtilsMessengerEXT m_debugMessenger;
 	std::vector<VkExtensionProperties> m_vkExtProps;
 	std::vector<const char*> m_validationLayers;
+	std::vector<const char*> m_requiredExtensions;
 	bool m_enableValidationLayers = false;
 
 
