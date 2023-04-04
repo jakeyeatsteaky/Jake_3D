@@ -1,10 +1,18 @@
 #ifndef VULKAN_RENDERER_H
 #define VULKAN_RENDERER_H
 #include <iostream>
+#include <optional>
 #include <vector>
 
 #define GLFW_INCLUDE_VULKAN
 #include "GLFW/glfw3.h"
+
+struct QueueFamilyIdxs
+{
+	std::optional<uint32_t> graphicsFamily;
+
+	bool IsComplete() {	return graphicsFamily.has_value(); }
+};
 
 class VulkanRenderer
 {
@@ -16,6 +24,9 @@ public:
 	bool CheckValidationLayers();
 	VkResult SetupDebugMessenger();
 	void DestroyDebugMessenger();
+	void PickPhysicalDevice();
+	bool IsDeviceSuitable(VkPhysicalDevice device);
+	QueueFamilyIdxs FindQueueFamilies(VkPhysicalDevice device);
 
 	void CleanUp();
 
@@ -31,9 +42,11 @@ public:
 private:
 	VkInstance m_instance;
 	VkDebugUtilsMessengerEXT m_debugMessenger;
+	VkPhysicalDevice m_physicalDevice = VK_NULL_HANDLE;
 	std::vector<VkExtensionProperties> m_vkExtProps;
 	std::vector<const char*> m_validationLayers;
 	std::vector<const char*> m_requiredExtensions;
+	QueueFamilyIdxs m_queueFamilyIndices;
 	bool m_enableValidationLayers = false;
 
 

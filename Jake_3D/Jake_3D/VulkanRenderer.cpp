@@ -14,7 +14,8 @@ void VulkanRenderer::Init()
     if (SetupDebugMessenger() != VK_SUCCESS)
         throw std::runtime_error("failed to set up debug messenger\n");
 
-
+    PickPhysicalDevice();
+    
 
 }
 
@@ -135,7 +136,7 @@ VKAPI_ATTR VkBool32 VKAPI_CALL VulkanRenderer::DebugCallback(
     const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
     void* pUserData)
 {
-    std::cerr << "::Validation Layer::\t" << pCallbackData->pMessage << std::endl;
+    std::cerr << "VVL--> " << pCallbackData->pMessage << std::endl;
 
     return VK_FALSE;
 }
@@ -164,6 +165,67 @@ void VulkanRenderer::DestroyDebugMessenger()
         func(m_instance, m_debugMessenger, nullptr);
     }
 }
+
+void VulkanRenderer::PickPhysicalDevice()
+{
+    // list graphics cards available
+    uint32_t deviceCount = 0;
+    vkEnumeratePhysicalDevices(m_instance, &deviceCount, nullptr);
+    if (deviceCount == 0)
+        throw std::runtime_error("failed to find GPUs with Vulkan support\n");
+    std::vector<VkPhysicalDevice> devices(deviceCount);
+    vkEnumeratePhysicalDevices(m_instance, &deviceCount, devices.data());
+
+    for (const auto& device : devices) {
+        if (IsDeviceSuitable(device)) {
+            m_physicalDevice = device;
+            
+            VkPhysicalDeviceProperties deviceProperties;
+            vkGetPhysicalDeviceProperties(m_physicalDevice, &deviceProperties);
+            std::cout << "Selected Physical Device: " << deviceProperties.deviceName << std::endl;
+            break;
+        }
+    }
+
+    if (m_physicalDevice == VK_NULL_HANDLE) {
+        throw std::runtime_error("failed to find a suitable GPU!");
+    }
+
+}
+
+bool VulkanRenderer::IsDeviceSuitable(VkPhysicalDevice device) {
+    QueueFamilyIdxs m_queueFamilyIndices = FindQueueFamilies(device);
+
+    return m_queueFamilyIndices.IsComplete();
+}
+
+QueueFamilyIdxs VulkanRenderer::FindQueueFamilies(VkPhysicalDevice device)
+{
+    QueueFamilyIdxs indices;
+
+    uint32_t queueFamilyCount = 0;
+    vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, nullptr);
+
+    std::vector<VkQueueFamilyProperties> queueFamilies(queueFamilyCount);
+    vkGetPhysicalDeviceQueueFamilyProperties(device, &queueFamilyCount, queueFamilies.data());
+
+    int i = 0;
+    for (const auto& queueFamily : queueFamilies) {
+        if (queueFamily.queueFlags & VK_QUEUE_GRAPHICS_BIT) {
+            indices.graphicsFamily = i;
+        }
+
+        if (indices.IsComplete()) {
+            break;
+        }
+
+        i++;
+    }
+
+    return indices;
+    
+}
+
 
 void VulkanRenderer::CleanUp()
 {
