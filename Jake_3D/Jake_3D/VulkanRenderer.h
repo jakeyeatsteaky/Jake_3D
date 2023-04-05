@@ -27,6 +27,7 @@ public:
 	void PickPhysicalDevice();
 	bool IsDeviceSuitable(VkPhysicalDevice device);
 	QueueFamilyIdxs FindQueueFamilies(VkPhysicalDevice device);
+	void CreateLogicalDevice();
 
 	void CleanUp();
 
@@ -47,6 +48,8 @@ private:
 	std::vector<const char*> m_validationLayers;
 	std::vector<const char*> m_requiredExtensions;
 	QueueFamilyIdxs m_queueFamilyIndices;
+	VkDevice m_device;
+	VkQueue m_graphicsQueue;
 	bool m_enableValidationLayers = false;
 
 
